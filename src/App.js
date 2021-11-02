@@ -1,3 +1,5 @@
+import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import "./App.css";
 
 const imageArray = [
@@ -9,16 +11,18 @@ const imageArray = [
   { src: 6 },
 ];
 
-const shuffleCards = () => {
-  const shuffledCards = [...imageArray, ...imageArray]
-    .sort(() => Math.random() - 0.5)
-    .map((c) => ({ ...c, id: Math.random() }));
-  console.log(shuffledCards);
-};
-
-shuffleCards();
-
 function App() {
+  const [cards, setCards] = useState();
+
+  const shuffleCards = () => {
+    const shuffledCards = [...imageArray, ...imageArray]
+      .sort(() => Math.random() - 0.5)
+      .map((c) => ({ ...c, id: Math.random() }));
+    setCards(shuffledCards);
+    console.log(cards);
+  };
+
+  shuffleCards();
   return <div className="App"></div>;
 }
 
