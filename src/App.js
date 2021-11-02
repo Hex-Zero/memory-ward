@@ -9,6 +9,15 @@ const imageArray = [
   { src: 6 },
 ];
 
+const shuffleCards = () => {
+  const shuffledCards = [...imageArray, ...imageArray]
+    .sort(() => Math.random() - 0.5)
+    .map((c) => ({ ...c, id: Math.random() }));
+  console.log(shuffledCards);
+};
+
+shuffleCards();
+
 function App() {
   return <div className="App"></div>;
 }
