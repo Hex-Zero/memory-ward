@@ -2,16 +2,16 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import "./App.css";
 
-const imageArray = [
-  { src: 1 },
-  { src: 2 },
-  { src: 3 },
-  { src: 4 },
-  { src: 5 },
-  { src: 6 },
-];
-
 function App() {
+  const imageArray = [
+    { src: 1 },
+    { src: 2 },
+    { src: 3 },
+    { src: 4 },
+    { src: 5 },
+    { src: 6 },
+  ];
+
   const [cards, setCards] = useState([]);
   const [truns, setTurns] = useState(0);
 
