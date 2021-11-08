@@ -35,15 +35,43 @@ function App() {
   ];
 
   const [cards, setCards] = useState(shuffle([...imageArray, ...imageArray]));
-  const [flipped, setFlipped] = useState([]);
+  const [firstChoise, setFirstChoise] = useState<cardModel | null>(null);
+  const [secondChoise, setSecondChoise] = useState<cardModel | null>(null);
+  const [turns, setTurns] = useState(0);
+
+  const hangleCardClick = (card: cardModel) => {
+    if(!firstChoise) {
+      setFirstChoise(card);
+    } else if(!secondChoise) {
+      setSecondChoise(card);
+    }
+  };
+
+  const resetSelection = () => {
+    setFirstChoise(null);
+    setSecondChoise(null);
+    setTurns(turns + 1);
+  };
+
+  const handleReset = () => {
+    setCards(shuffle([...imageArray, ...imageArray]));
+    setFirstChoise(null);
+    setSecondChoise(null);
+    setTurns(0);
+  };
+
 
   return <div className="App">
     <div className="card-grid">
-    {cards.map((element,index) => (
+    {cards.map((card,index) => (
       
-      <div id={index.toString()} className="card">{element.src}</div>
+      <div id={(index + card.src).toString()} className="card" onClick={()=>hangleCardClick(card)}>{card.src}</div>
     ))}
     </div>
+
+    <div className="button-container">
+      <button onClick={handleReset}>Reset</button>
+      </div>
   </div>;
 }
 
