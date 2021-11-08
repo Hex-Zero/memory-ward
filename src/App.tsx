@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function shuffle(array: cardModel[]) {
@@ -46,6 +46,16 @@ function App() {
       setSecondChoise(card);
     }
   };
+
+  useEffect(() => {
+    if(firstChoise && firstChoise?.src === secondChoise?.src){
+      console.log('match');
+      resetSelection();
+    }else{
+      console.log('no match');
+      resetSelection();
+    }
+  }, [ secondChoise ]);
 
   const resetSelection = () => {
     setFirstChoise(null);
