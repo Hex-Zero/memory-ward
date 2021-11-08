@@ -44,8 +44,6 @@ function App() {
       <div id={index.toString()} className="card">{element.src}</div>
     ))}
     </div>
-
-
   </div>;
 }
 
