@@ -20,6 +20,11 @@ function shuffle(array: cardModel[]) {
   return array;
 }
 
+interface indexedCard{
+  card: cardModel;
+  index: number;
+}
+
 interface cardModel {
   src : number,
   visible : boolean,
@@ -34,11 +39,17 @@ function App() {
     { 'src': 4, 'visible': false , 'disabled': false },
     { 'src': 5, 'visible': false , 'disabled': false },
     { 'src': 6, 'visible': false , 'disabled': false },
+    { 'src': 1, 'visible': false , 'disabled': false },
+    { 'src': 2, 'visible': false , 'disabled': false },
+    { 'src': 3, 'visible': false , 'disabled': false },
+    { 'src': 4, 'visible': false , 'disabled': false },
+    { 'src': 5, 'visible': false , 'disabled': false },
+    { 'src': 6, 'visible': false , 'disabled': false },
   ];
 
-  const [cards, setCards] = useState(shuffle([...imageArray, ...imageArray]));
-  const [firstChoise, setFirstChoise] = useState<cardModel | null>(null);
-  const [secondChoise, setSecondChoise] = useState<cardModel | null>(null);
+  const [cards, setCards] = useState(shuffle([...imageArray]));
+  const [firstChoise, setFirstChoise] = useState<indexedCard | null>(null);
+  const [secondChoise, setSecondChoise] = useState<indexedCard | null>(null);
   const [turns, setTurns] = useState(0);
 
   const resetSelection = () => {
@@ -48,40 +59,57 @@ function App() {
   };
 
   const handleReset = () => {
-    setCards(shuffle([...imageArray, ...imageArray]));
+    setCards(shuffle([...imageArray]));
     setFirstChoise(null);
     setSecondChoise(null);
     setTurns(0);
   };
 
-  const hangleCardClick = (card: cardModel, index: number) => {
-    if(!firstChoise) {
-      setFirstChoise(card);
-    } else if(!secondChoise) {
-      setSecondChoise(card);
-    }
-    flipCard(index);
+  const disableCard = async (index: number) => {
+    const newCards = [...cards];
+    newCards[index].disabled = true;
+    setCards(newCards); 
   };
 
-  const flipCard = (index: number) => {
+  const hangleCardClick = async (card: cardModel, index: number) => {
+    if(!firstChoise) {
+      setFirstChoise({card, index});
+    } else if(!secondChoise) {
+      setSecondChoise({card, index});
+    }
+    
+    await flipCard(index);
+
+    
+      await  disableCard(index);
+
+    console.log(card);
+    
+  };
+  
+  const enableCard = (index: number) => {
     setCards(cards.map((c, i) => { 
       if(i === index) {
         return {
           ...c,
-          visible: true
+          disabled: false
         }
       }
       return c;
     }
     ));
+  };
+
+  const flipCard = async (index: number) => {
+    const cardArray = [...cards];
+    cardArray[index].visible = true;
+    await setCards(cardArray);
   }
 
   useEffect(() => {
-    if(secondChoise && firstChoise?.src === secondChoise?.src){
-      console.log('match');
+    if(secondChoise && firstChoise?.card.src === secondChoise?.card.src){
       resetSelection();
     }else if(secondChoise){
-      console.log('no match');
       resetSelection();
     }
   }, [ secondChoise ]);
@@ -91,7 +119,7 @@ function App() {
         <div className="card-grid">
         {cards.map((card,index) => (
           <div id={(index + card.src + index).toString()} 
-              className="card" onClick={()=>hangleCardClick(card, index)}>{card.visible? card.src : '-'} 
+              className="card" onClick={ ()=> card.disabled ? null : hangleCardClick(card, index)}>{card.visible? card.src : '-'} 
           </div>
         ))}
         </div>
