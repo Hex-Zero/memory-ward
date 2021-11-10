@@ -72,17 +72,18 @@ function App() {
 
 
   return <div className="App">
-    <div className="card-grid">
-    {cards.map((card,index) => (
-      
-      <div id={(index + card.src).toString()} className="card" onClick={()=>hangleCardClick(card)}>{card.src}</div>
-    ))}
-    </div>
+        <div className="card-grid">
+        {cards.map((card,index) => (
+          <div id={(index + card.src).toString()} 
+              className="card" onClick={()=>hangleCardClick(card)}>{card.src}
+          </div>
+        ))}
+        </div>
 
-    <div className="button-container">
-      <button onClick={handleReset}>Reset</button>
-      </div>
-  </div>;
+        <div className="button-container">
+          <button onClick={handleReset}>Reset</button>
+        </div>
+      </div>;
 }
 
 export default App;
