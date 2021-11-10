@@ -48,10 +48,10 @@ function App() {
   };
 
   useEffect(() => {
-    if(firstChoise && firstChoise?.src === secondChoise?.src){
+    if(secondChoise && firstChoise?.src === secondChoise?.src){
       console.log('match');
       resetSelection();
-    }else{
+    }else if(secondChoise){
       console.log('no match');
       resetSelection();
     }
@@ -74,7 +74,7 @@ function App() {
   return <div className="App">
         <div className="card-grid">
         {cards.map((card,index) => (
-          <div id={(index + card.src).toString()} 
+          <div id={(index + card.src + index).toString()} 
               className="card" onClick={()=>hangleCardClick(card)}>{card.src}
           </div>
         ))}
