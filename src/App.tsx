@@ -21,41 +21,25 @@ function shuffle(array: cardModel[]) {
 }
 
 interface cardModel {
-  src : number
+  src : number,
+  visible : boolean,
+  disabled : boolean
 }
 
 function App() {
   const imageArray: cardModel[] = [
-    { 'src': 1 },
-    { 'src': 2 },
-    { 'src': 3 },
-    { 'src': 4 },
-    { 'src': 5 },
-    { 'src': 6 },
+    { 'src': 1, 'visible': false , 'disabled': false },
+    { 'src': 2, 'visible': false , 'disabled': false },
+    { 'src': 3, 'visible': false , 'disabled': false },
+    { 'src': 4, 'visible': false , 'disabled': false },
+    { 'src': 5, 'visible': false , 'disabled': false },
+    { 'src': 6, 'visible': false , 'disabled': false },
   ];
 
   const [cards, setCards] = useState(shuffle([...imageArray, ...imageArray]));
   const [firstChoise, setFirstChoise] = useState<cardModel | null>(null);
   const [secondChoise, setSecondChoise] = useState<cardModel | null>(null);
   const [turns, setTurns] = useState(0);
-
-  const hangleCardClick = (card: cardModel) => {
-    if(!firstChoise) {
-      setFirstChoise(card);
-    } else if(!secondChoise) {
-      setSecondChoise(card);
-    }
-  };
-
-  useEffect(() => {
-    if(secondChoise && firstChoise?.src === secondChoise?.src){
-      console.log('match');
-      resetSelection();
-    }else if(secondChoise){
-      console.log('no match');
-      resetSelection();
-    }
-  }, [ secondChoise ]);
 
   const resetSelection = () => {
     setFirstChoise(null);
@@ -70,12 +54,44 @@ function App() {
     setTurns(0);
   };
 
+  const hangleCardClick = (card: cardModel, index: number) => {
+    if(!firstChoise) {
+      setFirstChoise(card);
+    } else if(!secondChoise) {
+      setSecondChoise(card);
+    }
+    flipCard(index);
+  };
+
+  const flipCard = (index: number) => {
+    setCards(cards.map((c, i) => { 
+      if(i === index) {
+        return {
+          ...c,
+          visible: true
+        }
+      }
+      return c;
+    }
+    ));
+  }
+
+  useEffect(() => {
+    if(secondChoise && firstChoise?.src === secondChoise?.src){
+      console.log('match');
+      resetSelection();
+    }else if(secondChoise){
+      console.log('no match');
+      resetSelection();
+    }
+  }, [ secondChoise ]);
+
 
   return <div className="App">
         <div className="card-grid">
         {cards.map((card,index) => (
           <div id={(index + card.src + index).toString()} 
-              className="card" onClick={()=>hangleCardClick(card)}>{card.src}
+              className="card" onClick={()=>hangleCardClick(card, index)}>{card.visible? card.src : '-'} 
           </div>
         ))}
         </div>
