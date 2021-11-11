@@ -79,25 +79,15 @@ function App() {
     }
     
     await flipCard(index);
-
-    
-      await  disableCard(index);
+    await  disableCard(index);
 
     console.log(card);
-    
   };
   
   const enableCard = (index: number) => {
-    setCards(cards.map((c, i) => { 
-      if(i === index) {
-        return {
-          ...c,
-          disabled: false
-        }
-      }
-      return c;
-    }
-    ));
+    const newCards = [...cards];
+    newCards[index].disabled = false;
+    setCards(newCards);
   };
 
   const flipCard = async (index: number) => {
